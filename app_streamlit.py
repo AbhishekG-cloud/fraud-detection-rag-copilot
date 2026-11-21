@@ -25,7 +25,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* ================= MAIN APPLICATION ================= */
+/* Main application */
 
 .stApp {
     background-color: #0B1120;
@@ -38,7 +38,7 @@ st.markdown("""
     max-width: 1450px;
 }
 
-/* ================= TYPOGRAPHY ================= */
+/* Typography */
 
 h1, h2, h3 {
     color: #F8FAFC !important;
@@ -49,7 +49,7 @@ p, li {
     color: #CBD5E1;
 }
 
-/* ================= SIDEBAR ================= */
+/* Sidebar */
 
 [data-testid="stSidebar"] {
     background-color: #111827;
@@ -62,7 +62,7 @@ p, li {
     color: #F8FAFC !important;
 }
 
-/* ================= METRIC CARDS ================= */
+/* Metrics */
 
 [data-testid="stMetric"] {
     background-color: #151F32;
@@ -79,7 +79,7 @@ p, li {
     color: #38BDF8 !important;
 }
 
-/* ================= BUTTONS ================= */
+/* Buttons */
 
 .stButton > button {
     background-color: #17243A;
@@ -107,7 +107,7 @@ p, li {
     background-color: #0E7490;
 }
 
-/* ================= DATAFRAME ================= */
+/* Dataframes */
 
 [data-testid="stDataFrame"] {
     border: 1px solid #263449;
@@ -115,83 +115,19 @@ p, li {
     overflow: hidden;
 }
 
-/* ================= DIVIDERS ================= */
+/* Dividers */
 
 hr {
     border-color: #263449 !important;
 }
 
-/* ================= ALERTS ================= */
+/* Alerts */
 
 [data-testid="stAlert"] {
     border-radius: 10px;
 }
 
-/* ================= DASHBOARD CARDS ================= */
-
-.dashboard-card {
-    background-color: #151F32;
-    border: 1px solid #263449;
-    border-radius: 12px;
-    padding: 20px;
-    min-height: 125px;
-    margin-bottom: 12px;
-}
-
-.dashboard-card-title {
-    color: #94A3B8;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-
-.dashboard-card-value {
-    color: #38BDF8;
-    font-size: 25px;
-    font-weight: 700;
-    margin-top: 8px;
-}
-
-.dashboard-card-description {
-    color: #94A3B8;
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-/* ================= HERO HEADER ================= */
-
-.hero-container {
-    background: linear-gradient(110deg, #14243B, #102D42);
-    border: 1px solid #164E63;
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 30px;
-}
-
-.hero-title {
-    color: #F8FAFC;
-    font-size: 35px;
-    font-weight: 750;
-    margin-top: 12px;
-    margin-bottom: 5px;
-}
-
-.hero-subtitle {
-    color: #94A3B8;
-    font-size: 14px;
-    margin-top: 10px;
-    line-height: 1.7;
-}
-
-.status-indicator {
-    color: #34D399;
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 20px;
-}
-
-/* ================= SECTION LABELS ================= */
+/* Section labels */
 
 .section-label {
     color: #38BDF8;
@@ -201,7 +137,71 @@ hr {
     text-transform: uppercase;
 }
 
-/* ================= FOOTER ================= */
+/* Hero header */
+
+.hero-container {
+    background: linear-gradient(110deg, #14243B, #102D42);
+    border: 1px solid #164E63;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 30px;
+}
+
+.hero-title {
+    color: #F8FAFC;
+    font-size: 35px;
+    font-weight: 750;
+    margin-top: 14px;
+    margin-bottom: 5px;
+}
+
+.hero-subtitle {
+    color: #94A3B8;
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 1.8;
+}
+
+.status-indicator {
+    color: #34D399;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 22px;
+}
+
+/* KPI cards */
+
+.dashboard-card {
+    background-color: #151F32;
+    border: 1px solid #263449;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 125px;
+    box-sizing: border-box;
+}
+
+.dashboard-card-title {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.dashboard-card-value {
+    color: #38BDF8;
+    font-size: 25px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.dashboard-card-description {
+    color: #94A3B8;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Footer */
 
 .footer {
     text-align: center;
@@ -273,10 +273,10 @@ with st.sidebar:
 
 # ============================================================
 # 4. MAIN DASHBOARD HEADER
+# IMPORTANT: Use st.html(), NOT st.markdown()
 # ============================================================
 
-st.markdown(
-    """
+st.html("""
 <div class="hero-container">
 
     <div class="section-label">
@@ -297,17 +297,17 @@ st.markdown(
     </div>
 
 </div>
-""",
-    unsafe_allow_html=True
-)
+""")
 
 
 # ============================================================
 # 5. ABOUT THE PROJECT
 # ============================================================
 
-st.markdown('<div class="section-label">PROJECT OVERVIEW</div>',
-            unsafe_allow_html=True)
+st.markdown(
+    '<div class="section-label">PROJECT OVERVIEW</div>',
+    unsafe_allow_html=True
+)
 
 st.subheader("About This Project")
 
@@ -320,7 +320,6 @@ using an XGBoost classifier trained on the Kaggle Credit Card Fraud Detection Da
 - **Model:** XGBoost Classifier
 - **Explainability:** SHAP
 """)
-
 
 st.divider()
 
@@ -339,53 +338,64 @@ st.subheader("Model and Dataset Snapshot")
 kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
 with kpi1:
-    st.markdown(
-        """
-<div class="dashboard-card">
-    <div class="dashboard-card-title">Total Transactions</div>
-    <div class="dashboard-card-value">284,807</div>
-    <div class="dashboard-card-description">Dataset observations</div>
-</div>
-""",
-        unsafe_allow_html=True
-    )
+    st.html("""
+    <div class="dashboard-card">
+        <div class="dashboard-card-title">
+            Total Transactions
+        </div>
+        <div class="dashboard-card-value">
+            284,807
+        </div>
+        <div class="dashboard-card-description">
+            Dataset observations
+        </div>
+    </div>
+    """)
 
 with kpi2:
-    st.markdown(
-        """
-<div class="dashboard-card">
-    <div class="dashboard-card-title">Fraud Rate</div>
-    <div class="dashboard-card-value">0.17%</div>
-    <div class="dashboard-card-description">Highly imbalanced dataset</div>
-</div>
-""",
-        unsafe_allow_html=True
-    )
+    st.html("""
+    <div class="dashboard-card">
+        <div class="dashboard-card-title">
+            Fraud Rate
+        </div>
+        <div class="dashboard-card-value">
+            0.17%
+        </div>
+        <div class="dashboard-card-description">
+            Highly imbalanced dataset
+        </div>
+    </div>
+    """)
 
 with kpi3:
-    st.markdown(
-        """
-<div class="dashboard-card">
-    <div class="dashboard-card-title">ML Algorithm</div>
-    <div class="dashboard-card-value">XGBoost</div>
-    <div class="dashboard-card-description">Gradient boosting classifier</div>
-</div>
-""",
-        unsafe_allow_html=True
-    )
+    st.html("""
+    <div class="dashboard-card">
+        <div class="dashboard-card-title">
+            ML Algorithm
+        </div>
+        <div class="dashboard-card-value">
+            XGBoost
+        </div>
+        <div class="dashboard-card-description">
+            Gradient boosting classifier
+        </div>
+    </div>
+    """)
 
 with kpi4:
-    st.markdown(
-        """
-<div class="dashboard-card">
-    <div class="dashboard-card-title">Explainability</div>
-    <div class="dashboard-card-value">SHAP</div>
-    <div class="dashboard-card-description">Feature-level interpretation</div>
-</div>
-""",
-        unsafe_allow_html=True
-    )
-
+    st.html("""
+    <div class="dashboard-card">
+        <div class="dashboard-card-title">
+            Explainability
+        </div>
+        <div class="dashboard-card-value">
+            SHAP
+        </div>
+        <div class="dashboard-card-description">
+            Feature-level interpretation
+        </div>
+    </div>
+    """)
 
 st.divider()
 
@@ -409,17 +419,21 @@ st.caption(
 col1, col2 = st.columns(2)
 
 with col1:
+
     if st.button(
         "🟢 Load Legitimate Example",
         use_container_width=True
     ):
+
         st.session_state.transaction = LEGIT
 
 with col2:
+
     if st.button(
         "🔴 Load Fraud Example",
         use_container_width=True
     ):
+
         st.session_state.transaction = FRAUD
 
 
@@ -447,7 +461,8 @@ if "transaction" in st.session_state:
 
 
     # ========================================================
-    # 9. PREDICTION ENGINE — ORIGINAL LOGIC
+    # 9. PREDICTION ENGINE
+    # ORIGINAL LOGIC PRESERVED
     # ========================================================
 
     if st.button(
@@ -539,12 +554,12 @@ if "transaction" in st.session_state:
                 f"{fraud_probability:.2f}%"
             )
 
-
             st.divider()
 
 
             # ====================================================
-            # 12. SHAP EXPLANATION — ORIGINAL LOGIC
+            # 12. SHAP EXPLANATION
+            # ORIGINAL LOGIC PRESERVED
             # ====================================================
 
             st.markdown(
@@ -594,7 +609,7 @@ if "transaction" in st.session_state:
 
 
             # ====================================================
-            # 14. SHAP FEATURE CONTRIBUTION CHART
+            # 14. SHAP CONTRIBUTION CHART
             # ====================================================
 
             st.subheader("Feature Contribution Chart")
@@ -631,17 +646,17 @@ else:
 
 # ============================================================
 # 16. FOOTER
+# IMPORTANT: Use st.html()
 # ============================================================
 
 st.divider()
 
-st.markdown(
-    """
+st.html("""
 <div class="footer">
 
     <b>FraudGuard | Credit Card Fraud Detection System</b>
 
-    <br>
+    <br><br>
 
     Powered by XGBoost • Explained using SHAP • Built with Streamlit
 
@@ -650,6 +665,4 @@ st.markdown(
     Machine Learning Project | 2026
 
 </div>
-""",
-    unsafe_allow_html=True
-)
+""")
