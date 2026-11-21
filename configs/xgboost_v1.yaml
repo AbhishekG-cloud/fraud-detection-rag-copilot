@@ -1,0 +1,16 @@
+model:
+  name: xgboost
+  version: v1
+  objective: binary:logistic
+  max_depth: 3
+  learning_rate: 0.2
+  n_estimators: 300
+  scale_pos_weight: 545.3908872901678
+
+training:
+  imbalance_strategy: scale_pos_weight
+  split_strategy: time_based
+  random_state: 42
+
+evaluation:
+  primary_metric: average_precision

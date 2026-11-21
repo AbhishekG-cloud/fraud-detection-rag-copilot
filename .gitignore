@@ -230,3 +230,31 @@ artifact/
 ## git push -u origin main
 resume.txt
 chek.py
+
+# Local editor settings
+.vscode/
+
+# Python environments
+venv/
+.venv/
+
+# Model training outputs
+mlruns/
+mlartifacts/
+
+# Local application files
+.streamlit/secrets.toml
+.DS_Store
+
+# Temporary test files
+tempCodeRunnerFile.py
+
+# Raw and processed datasets
+data/
+notebooks/data/
+artifact/data.csv
+artifact/train.csv
+artifact/test.csv
+
+# Local training outputs
+artifact/

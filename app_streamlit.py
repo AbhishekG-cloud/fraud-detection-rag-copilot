@@ -1,6 +1,10 @@
+
 import streamlit as st
+import pandas as pd
+
 from src.pipeline.predict_pipeline import CustomData, PredPipeline
 from demo_transactions import LEGIT, FRAUD
+
 
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
@@ -8,16 +12,19 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("💳 Credit Card Fraud Detection System")
+st.title("Credit Card Fraud Detection System")
+st.caption("XGBoost-based fraud detection with SHAP explainability")
 
 st.markdown("""
 ### About This Project
 
-This application predicts whether a credit card transaction is fraudulent using an XGBoost classifier trained on the Kaggle Credit Card Fraud Detection Dataset.
+This application predicts whether a credit card transaction is fraudulent
+using an XGBoost classifier trained on the Kaggle Credit Card Fraud Detection Dataset.
 
-**Dataset Size:** 284,807 Transactions  
-**Fraud Rate:** 0.17%  
-**Model:** XGBoost Classifier
+- **Dataset:** 284,807 transactions
+- **Fraud rate:** 0.17%
+- **Model:** XGBoost Classifier
+- **Explainability:** SHAP
 """)
 
 st.divider()
@@ -25,12 +32,13 @@ st.divider()
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("🟢 Load Legitimate Example"):
+    if st.button("Load Legitimate Example", use_container_width=True):
         st.session_state.transaction = LEGIT
 
 with col2:
-    if st.button("🔴 Load Fraud Example"):
+    if st.button("Load Fraud Example", use_container_width=True):
         st.session_state.transaction = FRAUD
+
 
 if "transaction" in st.session_state:
 
@@ -41,66 +49,108 @@ if "transaction" in st.session_state:
     display_data = txn.copy()
     display_data.pop("Class", None)
 
-    st.dataframe(display_data)
+    st.dataframe(
+        pd.DataFrame([display_data]),
+        use_container_width=True
+    )
 
-    if st.button("🚀 Predict"):
+    if st.button("Predict and Explain", type="primary"):
 
-        data = CustomData(
-            Time=txn["Time"],
-            Amount=txn["Amount"],
-            V1=txn["V1"],
-            V2=txn["V2"],
-            V3=txn["V3"],
-            V4=txn["V4"],
-            V5=txn["V5"],
-            V6=txn["V6"],
-            V7=txn["V7"],
-            V8=txn["V8"],
-            V9=txn["V9"],
-            V10=txn["V10"],
-            V11=txn["V11"],
-            V12=txn["V12"],
-            V13=txn["V13"],
-            V14=txn["V14"],
-            V15=txn["V15"],
-            V16=txn["V16"],
-            V17=txn["V17"],
-            V18=txn["V18"],
-            V19=txn["V19"],
-            V20=txn["V20"],
-            V21=txn["V21"],
-            V22=txn["V22"],
-            V23=txn["V23"],
-            V24=txn["V24"],
-            V25=txn["V25"],
-            V26=txn["V26"],
-            V27=txn["V27"],
-            V28=txn["V28"]
-        )
+        try:
+            input_data = {
+                key: value
+                for key, value in txn.items()
+                if key != "Class"
+            }
 
-        pred_df = data.get_data_as_dataframe()
+            data = CustomData(**input_data)
+            pred_df = data.get_data_as_dataframe()
 
-        pipeline = PredPipeline()
+            pipeline = PredPipeline()
 
-        prediction, probability = pipeline.predict(pred_df)
+            with st.spinner("Analyzing transaction..."):
+                result = pipeline.predict_with_explanation(
+                    features=pred_df,
+                    top_k=5
+                )
 
-        fraud_prob = float(probability[0][1] * 100)
+            prediction = result["prediction"]
+            fraud_probability = result["fraud_probability"] * 100
 
-        st.divider()
+            st.divider()
+            st.subheader("Prediction Results")
 
-        if prediction[0] == 1:
+            metric1, metric2 = st.columns(2)
 
-            st.error(
-                f"⚠️ Fraudulent Transaction Detected\n\nConfidence: {fraud_prob:.2f}%"
+            with metric1:
+                st.metric(
+                    "Predicted Fraud Probability",
+                    f"{fraud_probability:.2f}%"
+                )
+
+            with metric2:
+                st.metric(
+                    "Model Classification",
+                    "Fraudulent" if prediction == 1 else "Legitimate"
+                )
+
+            if prediction == 1:
+                st.error("Fraudulent Transaction Detected")
+            else:
+                st.success("Legitimate Transaction")
+
+            st.divider()
+            st.subheader("SHAP Explanation")
+
+            st.markdown("""
+            SHAP identifies how individual features contribute to the
+            model's prediction.
+
+            - Positive SHAP value: pushes the prediction toward fraud.
+            - Negative SHAP value: pushes the prediction away from fraud.
+            """)
+
+            top_features = result["top_features"]
+
+            explanation_df = pd.DataFrame(top_features)
+
+            explanation_df["feature"] = (
+                explanation_df["feature"]
+                .str.replace("tran_pipeline__", "", regex=False)
             )
 
-        else:
-
-            st.success(
-                f"✅ Legitimate Transaction\n\nConfidence: {100 - fraud_prob:.2f}%"
+            explanation_df = explanation_df.rename(
+                columns={
+                    "feature": "Feature",
+                    "shap_value": "SHAP Value",
+                    "direction": "Contribution Direction"
+                }
             )
+
+            st.dataframe(
+                explanation_df,
+                use_container_width=True,
+                hide_index=True
+            )
+
+            st.subheader("Feature Contribution Chart")
+
+            chart_df = explanation_df[
+                ["Feature", "SHAP Value"]
+            ].set_index("Feature")
+
+            st.bar_chart(chart_df)
+
+            st.caption(
+                "SHAP values represent contributions to the model output "
+                "(raw margin), not percentage-point changes in fraud probability. "
+                "V1–V28 are anonymized PCA-transformed features."
+            )
+
+        except Exception as e:
+            st.error(f"Prediction failed: {str(e)}")
 
 else:
     st.info(
-        "Select either 'Load Legitimate Example' or 'Load Fraud Example' to test the model."
+        "Select a legitimate or fraudulent example to test the model."
     )
