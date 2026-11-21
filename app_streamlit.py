@@ -7,7 +7,7 @@ from demo_transactions import LEGIT, FRAUD
 
 
 # ============================================================
-# PAGE CONFIGURATION
+# 1. PAGE CONFIGURATION
 # ============================================================
 
 st.set_page_config(
@@ -19,20 +19,18 @@ st.set_page_config(
 
 
 # ============================================================
-# CUSTOM CSS — PRESENTATION ONLY
+# 2. CUSTOM CSS
 # ============================================================
 
 st.markdown("""
 <style>
 
-/* Main application */
+/* ================= MAIN APPLICATION ================= */
 
 .stApp {
     background-color: #0B1120;
     color: #E5E7EB;
 }
-
-/* Main content spacing */
 
 .block-container {
     padding-top: 2rem;
@@ -40,7 +38,7 @@ st.markdown("""
     max-width: 1450px;
 }
 
-/* Headings */
+/* ================= TYPOGRAPHY ================= */
 
 h1, h2, h3 {
     color: #F8FAFC !important;
@@ -51,7 +49,7 @@ p, li {
     color: #CBD5E1;
 }
 
-/* Sidebar */
+/* ================= SIDEBAR ================= */
 
 [data-testid="stSidebar"] {
     background-color: #111827;
@@ -64,7 +62,7 @@ p, li {
     color: #F8FAFC !important;
 }
 
-/* Metrics */
+/* ================= METRIC CARDS ================= */
 
 [data-testid="stMetric"] {
     background-color: #151F32;
@@ -81,7 +79,7 @@ p, li {
     color: #38BDF8 !important;
 }
 
-/* Buttons */
+/* ================= BUTTONS ================= */
 
 .stButton > button {
     background-color: #17243A;
@@ -109,7 +107,7 @@ p, li {
     background-color: #0E7490;
 }
 
-/* Dataframes */
+/* ================= DATAFRAME ================= */
 
 [data-testid="stDataFrame"] {
     border: 1px solid #263449;
@@ -117,25 +115,26 @@ p, li {
     overflow: hidden;
 }
 
-/* Dividers */
+/* ================= DIVIDERS ================= */
 
 hr {
     border-color: #263449 !important;
 }
 
-/* Alerts */
+/* ================= ALERTS ================= */
 
 [data-testid="stAlert"] {
     border-radius: 10px;
 }
 
-/* Custom cards */
+/* ================= DASHBOARD CARDS ================= */
 
 .dashboard-card {
     background-color: #151F32;
     border: 1px solid #263449;
     border-radius: 12px;
     padding: 20px;
+    min-height: 125px;
     margin-bottom: 12px;
 }
 
@@ -148,7 +147,7 @@ hr {
 }
 
 .dashboard-card-value {
-    color: #F8FAFC;
+    color: #38BDF8;
     font-size: 25px;
     font-weight: 700;
     margin-top: 8px;
@@ -160,25 +159,39 @@ hr {
     margin-top: 5px;
 }
 
+/* ================= HERO HEADER ================= */
+
 .hero-container {
     background: linear-gradient(110deg, #14243B, #102D42);
     border: 1px solid #164E63;
     border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 25px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.hero-title {
+    color: #F8FAFC;
+    font-size: 35px;
+    font-weight: 750;
+    margin-top: 12px;
+    margin-bottom: 5px;
 }
 
 .hero-subtitle {
     color: #94A3B8;
     font-size: 14px;
-    margin-top: 8px;
+    margin-top: 10px;
+    line-height: 1.7;
 }
 
 .status-indicator {
     color: #34D399;
     font-size: 13px;
     font-weight: 600;
+    margin-top: 20px;
 }
+
+/* ================= SECTION LABELS ================= */
 
 .section-label {
     color: #38BDF8;
@@ -188,11 +201,14 @@ hr {
     text-transform: uppercase;
 }
 
+/* ================= FOOTER ================= */
+
 .footer {
     text-align: center;
     color: #64748B;
     font-size: 12px;
     padding: 25px 0 10px 0;
+    line-height: 2;
 }
 
 </style>
@@ -200,7 +216,7 @@ hr {
 
 
 # ============================================================
-# SIDEBAR — PROJECT INFORMATION
+# 3. SIDEBAR
 # ============================================================
 
 with st.sidebar:
@@ -256,46 +272,46 @@ with st.sidebar:
 
 
 # ============================================================
-# MAIN DASHBOARD HEADER
+# 4. MAIN DASHBOARD HEADER
 # ============================================================
 
-st.markdown("""
+st.markdown(
+    """
 <div class="hero-container">
 
     <div class="section-label">
         MACHINE LEARNING • FINANCIAL SECURITY
     </div>
 
-    <h1 style="margin-bottom: 0;">
+    <div class="hero-title">
         Credit Card Fraud Detection
-    </h1>
+    </div>
 
     <div class="hero-subtitle">
         Intelligent transaction classification and
         explainable fraud analysis powered by XGBoost and SHAP.
     </div>
 
-    <br>
-
     <div class="status-indicator">
         ● MODEL INTERFACE READY
     </div>
 
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
-# ORIGINAL PROJECT INTRODUCTION
+# 5. ABOUT THE PROJECT
 # ============================================================
 
-st.title("Credit Card Fraud Detection System")
+st.markdown('<div class="section-label">PROJECT OVERVIEW</div>',
+            unsafe_allow_html=True)
 
-st.caption("XGBoost-based fraud detection with SHAP explainability")
+st.subheader("About This Project")
 
 st.markdown("""
-### About This Project
-
 This application predicts whether a credit card transaction is fraudulent
 using an XGBoost classifier trained on the Kaggle Credit Card Fraud Detection Dataset.
 
@@ -305,66 +321,83 @@ using an XGBoost classifier trained on the Kaggle Credit Card Fraud Detection Da
 - **Explainability:** SHAP
 """)
 
+
 st.divider()
 
 
 # ============================================================
-# DATASET OVERVIEW — UI ADDITION
+# 6. DATASET OVERVIEW
 # ============================================================
 
-st.markdown('<div class="section-label">DATASET OVERVIEW</div>',
-            unsafe_allow_html=True)
+st.markdown(
+    '<div class="section-label">DATASET OVERVIEW</div>',
+    unsafe_allow_html=True
+)
 
-st.markdown("### Model and Dataset Snapshot")
+st.subheader("Model and Dataset Snapshot")
 
 kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
 with kpi1:
-    st.markdown("""
-    <div class="dashboard-card">
-        <div class="dashboard-card-title">Total Transactions</div>
-        <div class="dashboard-card-value">284,807</div>
-        <div class="dashboard-card-description">Dataset observations</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class="dashboard-card">
+    <div class="dashboard-card-title">Total Transactions</div>
+    <div class="dashboard-card-value">284,807</div>
+    <div class="dashboard-card-description">Dataset observations</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 with kpi2:
-    st.markdown("""
-    <div class="dashboard-card">
-        <div class="dashboard-card-title">Fraud Rate</div>
-        <div class="dashboard-card-value">0.17%</div>
-        <div class="dashboard-card-description">Highly imbalanced dataset</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class="dashboard-card">
+    <div class="dashboard-card-title">Fraud Rate</div>
+    <div class="dashboard-card-value">0.17%</div>
+    <div class="dashboard-card-description">Highly imbalanced dataset</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 with kpi3:
-    st.markdown("""
-    <div class="dashboard-card">
-        <div class="dashboard-card-title">ML Algorithm</div>
-        <div class="dashboard-card-value">XGBoost</div>
-        <div class="dashboard-card-description">Gradient boosting classifier</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class="dashboard-card">
+    <div class="dashboard-card-title">ML Algorithm</div>
+    <div class="dashboard-card-value">XGBoost</div>
+    <div class="dashboard-card-description">Gradient boosting classifier</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 with kpi4:
-    st.markdown("""
-    <div class="dashboard-card">
-        <div class="dashboard-card-title">Explainability</div>
-        <div class="dashboard-card-value">SHAP</div>
-        <div class="dashboard-card-description">Feature-level interpretation</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class="dashboard-card">
+    <div class="dashboard-card-title">Explainability</div>
+    <div class="dashboard-card-value">SHAP</div>
+    <div class="dashboard-card-description">Feature-level interpretation</div>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 
 st.divider()
 
 
 # ============================================================
-# ORIGINAL TRANSACTION SELECTION
+# 7. TRANSACTION SELECTION
 # ============================================================
 
-st.markdown('<div class="section-label">TRANSACTION ANALYSIS</div>',
-            unsafe_allow_html=True)
+st.markdown(
+    '<div class="section-label">TRANSACTION ANALYSIS</div>',
+    unsafe_allow_html=True
+)
 
 st.subheader("Select a Transaction")
 
@@ -376,13 +409,23 @@ st.caption(
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("🟢 Load Legitimate Example", use_container_width=True):
+    if st.button(
+        "🟢 Load Legitimate Example",
+        use_container_width=True
+    ):
         st.session_state.transaction = LEGIT
 
 with col2:
-    if st.button("🔴 Load Fraud Example", use_container_width=True):
+    if st.button(
+        "🔴 Load Fraud Example",
+        use_container_width=True
+    ):
         st.session_state.transaction = FRAUD
 
+
+# ============================================================
+# 8. SELECTED TRANSACTION
+# ============================================================
 
 if "transaction" in st.session_state:
 
@@ -402,9 +445,18 @@ if "transaction" in st.session_state:
         "Review the selected transaction features before running the analysis."
     )
 
-    if st.button("🔍 Predict and Explain", type="primary"):
+
+    # ========================================================
+    # 9. PREDICTION ENGINE — ORIGINAL LOGIC
+    # ========================================================
+
+    if st.button(
+        "🔍 Predict and Explain",
+        type="primary"
+    ):
 
         try:
+
             input_data = {
                 key: value
                 for key, value in txn.items()
@@ -417,6 +469,7 @@ if "transaction" in st.session_state:
             pipeline = PredPipeline()
 
             with st.spinner("Analyzing transaction..."):
+
                 result = pipeline.predict_with_explanation(
                     features=pred_df,
                     top_k=5
@@ -425,8 +478,9 @@ if "transaction" in st.session_state:
             prediction = result["prediction"]
             fraud_probability = result["fraud_probability"] * 100
 
+
             # ====================================================
-            # ORIGINAL PREDICTION RESULTS
+            # 10. PREDICTION RESULTS
             # ====================================================
 
             st.divider()
@@ -441,30 +495,43 @@ if "transaction" in st.session_state:
             metric1, metric2 = st.columns(2)
 
             with metric1:
+
                 st.metric(
                     "Predicted Fraud Probability",
                     f"{fraud_probability:.2f}%"
                 )
 
             with metric2:
+
                 st.metric(
                     "Model Classification",
                     "Fraudulent" if prediction == 1 else "Legitimate"
                 )
 
+
             if prediction == 1:
+
                 st.error("🚨 Fraudulent Transaction Detected")
+
             else:
+
                 st.success("✓ Legitimate Transaction")
 
+
             # ====================================================
-            # ADDITIONAL VISUAL PRESENTATION
+            # 11. FRAUD PROBABILITY INDICATOR
             # ====================================================
 
             st.markdown("### Fraud Probability Indicator")
 
             st.progress(
-                max(0.0, min(1.0, float(fraud_probability / 100)))
+                max(
+                    0.0,
+                    min(
+                        1.0,
+                        float(fraud_probability / 100)
+                    )
+                )
             )
 
             st.caption(
@@ -472,10 +539,12 @@ if "transaction" in st.session_state:
                 f"{fraud_probability:.2f}%"
             )
 
+
             st.divider()
 
+
             # ====================================================
-            # ORIGINAL SHAP EXPLANATION
+            # 12. SHAP EXPLANATION — ORIGINAL LOGIC
             # ====================================================
 
             st.markdown(
@@ -510,14 +579,22 @@ if "transaction" in st.session_state:
                 }
             )
 
+
+            # ====================================================
+            # 13. SHAP FEATURE TABLE
+            # ====================================================
+
+            st.markdown("### Top Contributing Features")
+
             st.dataframe(
                 explanation_df,
                 use_container_width=True,
                 hide_index=True
             )
 
+
             # ====================================================
-            # ORIGINAL FEATURE CONTRIBUTION CHART
+            # 14. SHAP FEATURE CONTRIBUTION CHART
             # ====================================================
 
             st.subheader("Feature Contribution Chart")
@@ -528,33 +605,43 @@ if "transaction" in st.session_state:
 
             st.bar_chart(chart_df)
 
+
+            # ====================================================
+            # 15. SHAP INTERPRETATION NOTE
+            # ====================================================
+
             st.caption(
                 "SHAP values represent contributions to the model output "
                 "(raw margin), not percentage-point changes in fraud probability. "
                 "V1–V28 are anonymized PCA-transformed features."
             )
 
+
         except Exception as e:
+
             st.error(f"Prediction failed: {str(e)}")
 
+
 else:
+
     st.info(
         "Select a legitimate or fraudulent example to test the model."
     )
 
 
 # ============================================================
-# FOOTER — UI ADDITION
+# 16. FOOTER
 # ============================================================
 
 st.divider()
 
-st.markdown("""
+st.markdown(
+    """
 <div class="footer">
 
     <b>FraudGuard | Credit Card Fraud Detection System</b>
 
-    <br><br>
+    <br>
 
     Powered by XGBoost • Explained using SHAP • Built with Streamlit
 
@@ -563,4 +650,6 @@ st.markdown("""
     Machine Learning Project | 2026
 
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True
+)
