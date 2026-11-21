@@ -1,238 +1,334 @@
-### 1. README.md for Credit Card Fraud Detection Project
-
-Use this as the structure for your GitHub README.
-
 # Credit Card Fraud Detection System
 
-## Overview
+An end-to-end machine learning application for detecting fraudulent credit card transactions using XGBoost, with SHAP-based explainability and an interactive Streamlit interface.
 
-This project is an end-to-end Machine Learning application that detects fraudulent credit card transactions using highly imbalanced financial transaction data. The solution includes data preprocessing, model training, explainability, API deployment, Docker containerization, and cloud deployment on AWS.
+**Live Demo:** [Open Application](https://fraud-detection-rag-copilot-mcc4pvckeztjpn8tov62dx.streamlit.app/)
 
----
-
-## Problem Statement
-
-Credit card fraud causes significant financial losses for banks and customers. Fraudulent transactions represent only a tiny fraction of all transactions, making the dataset highly imbalanced and challenging for traditional machine learning models.
-
-The objective of this project is to build a robust fraud detection system that maximizes fraud detection while minimizing false alarms.
+**GitHub:** [Source Code](https://github.com/AbhishekG-cloud/fraud-detection-rag-copilot)
 
 ---
 
-## Dataset
+## 1. Project Overview
 
-* Source: Kaggle Credit Card Fraud Detection Dataset
-* Total Transactions: 284,807
-* Fraudulent Transactions: 492
-* Fraud Rate: ~0.17%
+Credit card fraud detection is a highly imbalanced binary classification problem. Fraudulent transactions account for only a tiny fraction of all transactions, making conventional accuracy-based evaluation unreliable.
 
-### Dataset Characteristics
+This project implements an end-to-end fraud detection pipeline that combines:
 
-* Highly imbalanced classification problem
-* Features V1–V28 obtained using PCA transformation
-* Additional features:
+- XGBoost for fraud classification.
+- Class-weight adjustment for handling class imbalance.
+- Time-based validation to respect transaction chronology.
+- SHAP (SHapley Additive exPlanations) for model interpretability.
+- Streamlit for interactive predictions and explanations.
+- Docker for application containerization.
 
-  * Time
-  * Amount
-* Target Variable:
+The application allows users to explore sample transactions, obtain fraud predictions, and understand which features contributed to the model's output.
+## 2 Application Preview
 
-  * 0 = Legitimate Transaction
-  * 1 = Fraudulent Transaction
+### Application Interface
+![Application Landing Page](screenshots/Landing%20page.png)
 
----
+### Legitimate Transaction Prediction
+![Legitimate Transaction Prediction](screenshots/Legitimate%20trans.png)
 
-## Project Architecture
+### Fraudulent Transaction Prediction
+![Fraudulent Transaction Prediction](screenshots/Fraud%20trans.png)
+
+## 3. Problem Statement
+
+The objective is to identify fraudulent credit card transactions while balancing two competing requirements:
+
+- Detect as many fraudulent transactions as possible.
+- Minimize false positive predictions on legitimate transactions.
+
+With an extremely low fraud prevalence, the model must learn meaningful patterns rather than simply favoring the majority class.
+
+## 4. Dataset
+
+**Source:** [Kaggle – Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+
+| Attribute | Description |
+|---|---|
+| Total transactions | 284,807 |
+| Fraudulent transactions | 492 |
+| Legitimate transactions | 284,315 |
+| Fraud prevalence | Approximately 0.172% |
+| Features | 30 |
+| Target | Class |
+
+### Feature Description
+
+- `V1–V28`: Anonymized features obtained through PCA transformation.
+- `Time`: Seconds elapsed between each transaction and the first transaction in the dataset.
+- `Amount`: Transaction amount.
+- `Class`: Target variable (0 = Legitimate, 1 = Fraudulent).
+
+## 5. Machine Learning Pipeline
+
+The project follows a modular machine learning pipeline:
+
+1. Data ingestion and exploration.
+2. Data quality assessment.
+3. Feature preprocessing.
+4. Baseline model development.
+5. Imbalance-aware model training.
+6. Hyperparameter optimization.
+7. Time-based model evaluation.
+8. Model serialization and inference.
+9. SHAP-based explainability.
+
+### Models Evaluated
+
+The experimentation included baseline classification approaches such as:
+
+- Logistic Regression
+- Decision Tree
+- Random Forest
+- Gradient Boosting
+- XGBoost
+
+**Final selected model:** XGBoost Classifier.
+
+## 6. Handling Class Imbalance
+
+Fraudulent transactions represent approximately 0.17% of the dataset.
+
+The project uses:
+
+- Class-weight adjustment through `scale_pos_weight`.
+- XGBoost-based classification.
+- Hyperparameter tuning.
+- Precision-Recall evaluation.
+- Time-based validation using chronological transaction ordering.
+
+The final model uses class weighting rather than relying on synthetic oversampling in the selected configuration.
+
+### Why Average Precision?
+
+Accuracy can be misleading in highly imbalanced classification.
+
+Average Precision (AP), which summarizes the precision-recall curve, provides a more informative evaluation of how well the model identifies the minority fraud class.
+
+## 7. Model Performance
+
+The following are previously recorded evaluation results for the selected XGBoost model.
+
+| Metric | Score |
+|---|---:|
+| Precision | 0.8235 |
+| Recall | 0.7467 |
+| F1 Score | 0.7832 |
+| Average Precision | 0.7968 |
+
+These are historical recorded results and have not been independently reproduced as part of this deployment.
+
+## 8. Model Explainability with SHAP
+
+A fraud prediction alone does not explain why a transaction was classified as fraudulent.
+
+To address this, the project integrates SHAP using `TreeExplainer`.
+
+For each prediction, the application provides:
+
+- Predicted fraud probability.
+- Predicted transaction classification.
+- Top five contributing features.
+- Direction of each feature's contribution.
+- SHAP contribution visualization.
+
+Feature contributions are categorized as:
+
+- `toward_fraud`
+- `away_from_fraud`
+- `neutral`
+
+**Important:** SHAP values represent contributions to the model's raw output, not direct percentage-point changes in predicted fraud probability.
+
+The original V1–V28 features are anonymized PCA components, so their individual real-world financial meanings are not directly interpretable.
+
+## 9. Application Architecture
 
 ```text
-creditcard_fraud/
+                Transaction Input
+                       |
+                       v
+               Streamlit Frontend
+                       |
+                       v
+                Prediction Pipeline
+                       |
+                +------+------+
+                |             |
+                v             v
+           Preprocessor    XGBoost Model
+                |             |
+                +------+------+
+                       |
+                       v
+                 Prediction
+                       |
+                       v
+                 SHAP Explainer
+                       |
+                       v
+              Structured Explanation
+                       |
+                       v
+               Streamlit Results
+```
+
+### Main Project Structure
+
+```text
+fraud-detection-rag-copilot/
+│
+├── app_streamlit.py
+├── app.py
+├── demo_transactions.py
+├── Dockerfile
+├── .dockerignore
+├── requirements.txt
 │
 ├── artifacts/
+│   ├── model.pkl
+│   └── preprocessor.pkl
+│
+├── configs/
+│   └── xgboost_v1.yaml
+│
+├── docs/
+│   └── shap_explanation_schema.md
+│
+├── layer1_fraud/
+│   └── explainability/
+│       └── shap_explaner.py
+│
 ├── notebooks/
+│   ├── 01_dataset_overview.ipynb
+│   ├── 02_eda.ipynb
+│   ├── 03_data_quality.ipynb
+│   ├── 04_baseline_models.ipynb
+│   ├── 05_smote_training.ipynb
+│   ├── 06_xgboost_baseline.ipynb
+│   ├── 07_xgboost_tuning_pass1.ipynb
+│   ├── 08_v1_final_evaluation.ipynb
+│   ├── 09_v1_shap_global.ipynb
+│   ├── 10_shap_explanation_function.ipynb
+│   └── 11_v1_error_analysis.ipynb
+│
 ├── src/
 │   ├── components/
 │   ├── pipeline/
+│   │   └── predict_pipeline.py
 │   ├── exception.py
 │   ├── logger.py
 │   └── utils.py
 │
-├── templates/
-├── static/
-├── app.py
-├── Dockerfile
-├── requirements.txt
-├── setup.py
-└── .github/workflows/
+├── reports/
+│
+├── test_inference.py
+├── test_shap.py
+└── test_pipeline_explanation.py
 ```
 
----
+## 10. Deployment
 
-## Workflow
+### Streamlit Community Cloud
 
-### Data Ingestion
+The application is publicly deployed using Streamlit Community Cloud.
 
-* Load transaction dataset
-* Train-test split
-* Store processed artifacts
+**Live Application:** [Launch Fraud Detection System](https://fraud-detection-rag-copilot-rxnk3hgrkxpqmvoccqxmik.streamlit.app/)
 
-### Data Transformation
+### Docker Containerization
 
-* Feature preprocessing
-* Pipeline creation
-* Data preparation for training
+The application is configured to run inside a Docker container.
 
-### Model Training
-
-Models evaluated:
-
-* Logistic Regression
-* Random Forest
-* Gradient Boosting
-* AdaBoost
-* XGBoost
-* Decision Tree
-* KNN
-
-Final Model:
-
-* XGBoost Classifier
-
----
-
-## Handling Class Imbalance
-
-The dataset contains only 0.17% fraudulent transactions.
-
-Techniques used:
-
-* Stratified Train-Test Split
-* Class Weight Adjustment
-* Threshold Optimization
-* Evaluation using Precision, Recall, F1 Score and ROC-AUC
-
----
-
-## Model Evaluation Metrics
-
-Key metrics used:
-
-* Precision
-* Recall
-* F1 Score
-* ROC-AUC
-* Confusion Matrix
-
-Special focus was placed on maximizing Recall to reduce missed fraud cases.
-
----
-
-## Deployment
-
-### Local Deployment
-
-* Flask Application
-* Docker Containerization
-
-### Cloud Deployment
-
-AWS Services Used:
-
-* Amazon EC2
-* Amazon ECR
-* IAM Users
-* IAM Roles
-* Security Groups
-
----
-
-## CI/CD Pipeline
-
-GitHub Actions pipeline implemented for automated deployment.
-
-Workflow:
-
-```text
-Git Push
-    ↓
-GitHub Actions
-    ↓
-Docker Build
-    ↓
-Amazon ECR
-    ↓
-EC2 Deployment
-```
-
-Implemented:
-
-* Automated Docker builds
-* ECR image push
-* SSH-based EC2 deployment
-* AWS authentication using IAM
-
----
-
-## Docker
-
-Dockerized application using:
+Build the image:
 
 ```bash
-docker build -t fraud-app .
-docker run -p 5000:5000 fraud-app
+docker build -t credit-card-fraud:v1 .
 ```
 
-Image optimized from approximately:
+Run the container:
 
-```text
-3.8 GB → 1.2 GB
+```bash
+docker run -d \
+  --name fraud_test \
+  -p 8501:8501 \
+  credit-card-fraud:v1
 ```
 
-through dependency and artifact cleanup.
+Check application health:
+
+```bash
+curl http://localhost:8501/_stcore/health
+```
+
+The application runs on port `8501`.
+
+### CI/CD
+
+A GitHub Actions workflow was configured for an AWS-based deployment pipeline involving:
+
+- Docker image building.
+- Amazon ECR image publishing.
+- EC2 deployment over SSH.
+- Application health checks.
+
+The AWS deployment is currently inactive. The public application is hosted on Streamlit Community Cloud instead.
+
+## 11. Technology Stack
+
+| Category | Technologies |
+|---|---|
+| Programming | Python |
+| Data Processing | NumPy, Pandas |
+| Machine Learning | Scikit-learn, XGBoost |
+| Explainability | SHAP |
+| Frontend | Streamlit |
+| Model Serialization | Dill, Pickle |
+| Containerization | Docker |
+| Version Control | Git, GitHub |
+| Deployment | Streamlit Community Cloud |
+| CI/CD | GitHub Actions (configured AWS workflow) |
+
+## 12. Limitations
+
+- The dataset contains anonymized PCA-transformed features.
+- The model is trained on a historical dataset and may not generalize to current fraud patterns.
+- The application uses sample transactions rather than a live banking transaction feed.
+- No real-time model monitoring or automated retraining system is implemented.
+- SHAP explanations indicate model behavior, not causal relationships.
+- This application is a portfolio demonstration, not a production banking fraud prevention system.
+
+## 13. Future Work
+
+### Fraud Investigator Copilot — Planned Extension
+
+The next planned development is a RAG-based Fraud Investigator Copilot.
+
+The intended architecture will use structured SHAP explanation outputs as input to a retrieval-augmented generation system.
+
+Potential capabilities:
+
+- Generate natural-language transaction investigation reports.
+- Summarize important fraud indicators.
+- Retrieve relevant fraud investigation documentation.
+- Assist analysts in interpreting model predictions.
+- Produce structured investigation summaries.
+
+This extension is planned and is not part of the current deployed application.
+
+## 14. Author
+
+**Abhishek Goswami**
+
+M.Sc. Mathematics | NIT Kurukshetra
+
+Interested in Machine Learning, Applied Mathematics, and Data Science.
+
+- GitHub: [AbhishekG-cloud](https://github.com/AbhishekG-cloud)
+- Project: [Credit Card Fraud Detection](https://github.com/AbhishekG-cloud/fraud-detection-rag-copilot)
 
 ---
 
-## Key Learnings
-
-* Working with highly imbalanced datasets
-* Fraud detection model development
-* XGBoost optimization
-* Model explainability using SHAP
-* Docker containerization
-* AWS EC2 deployment
-* Amazon ECR image management
-* IAM authentication and authorization
-* GitHub Actions CI/CD pipelines
-* Production deployment troubleshooting
-
----
-
-## Future Improvements
-
-* Real-time fraud scoring API
-* Monitoring and logging dashboard
-* Model drift detection
-* Kubernetes deployment
-* Automated retraining pipeline
-* A/B testing framework for model comparison
-
----
-
-## Tech Stack
-
-* Python
-* Pandas
-* NumPy
-* Scikit-Learn
-* XGBoost
-* Flask
-* Docker
-* AWS EC2
-* Amazon ECR
-* GitHub Actions
-
----
-
-## Author
-
-Abhishek Goswami
-
-M.Sc. Mathematics | Data Science & Machine Learning Enthusiast
-
+*Built as an end-to-end machine learning portfolio project, with an emphasis on imbalanced classification, model interpretability, and deployment.*
