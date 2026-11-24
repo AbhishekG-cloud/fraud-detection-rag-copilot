@@ -183,7 +183,15 @@ The original V1–V28 features are anonymized PCA components, so their individua
 
 ```text
 fraud-detection-xgboost-mlops/
-│
+│├── .github/
+│   └── workflows/
+│       └── main.yaml
+├── artifacts/
+├── screenshots/
+├── tests/
+│   ├── test_inference.py
+│   ├── test_pipeline_explanation.py
+│   └── test_shap.py
 ├── app_streamlit.py
 ├── app.py
 ├── demo_transactions.py
@@ -228,9 +236,7 @@ fraud-detection-xgboost-mlops/
 │
 ├── reports/
 │
-├── test_inference.py
-├── test_shap.py
-└── test_pipeline_explanation.py
+
 ```
 
 ## 10. Deployment
@@ -239,7 +245,7 @@ fraud-detection-xgboost-mlops/
 
 The application is publicly deployed using Streamlit Community Cloud.
 
-**Live Application:** [Launch Fraud Detection System](https://fraud-detection-rag-copilot-rxnk3hgrkxpqmvoccqxmik.streamlit.app/)
+**Live Application:** [Launch Fraud Detection System](https://fraud-detection-rag-copilot-mcc4pvckeztjpn8tov62dx.streamlit.app/)
 
 ### Docker Containerization
 
@@ -270,14 +276,18 @@ The application runs on port `8501`.
 
 ### CI/CD
 
-A GitHub Actions workflow was configured for an AWS-based deployment pipeline involving:
+GitHub Actions is configured to automate the continuous integration workflow.
 
-- Docker image building.
-- Amazon ECR image publishing.
-- EC2 deployment over SSH.
-- Application health checks.
+The workflow performs:
 
-The AWS deployment is currently inactive. The public application is hosted on Streamlit Community Cloud instead.
+- Python environment setup.
+- Dependency installation.
+- Automated pytest execution.
+- Docker image build verification.
+
+The workflow runs on pushes and pull requests targeting the `main` branch.
+
+The application is deployed separately through Streamlit Community Cloud. AWS-based deployment is currently inactive.
 
 ## 11. Technology Stack
 
@@ -292,7 +302,7 @@ The AWS deployment is currently inactive. The public application is hosted on St
 | Containerization | Docker |
 | Version Control | Git, GitHub |
 | Deployment | Streamlit Community Cloud |
-| CI/CD | GitHub Actions (configured AWS workflow) |
+| CI/CD | GitHub Actions (Automated Testing & Docker Build) |
 
 ## 12. Limitations
 
