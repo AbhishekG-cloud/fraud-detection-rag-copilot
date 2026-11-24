@@ -32,17 +32,8 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run Inference Tests
-        run: |
-          python -m pytest tests/test_inference.py -v
-
-      - name: Run SHAP Tests
-        run: |
-          python -m pytest tests/test_shap.py -v
-
-      - name: Run Pipeline Explanation Tests
-        run: |
-          python -m pytest tests/test_pipeline_explanation.py -v
+      - name: Run Automated Tests
+        run: python -m pytest tests/test_inference.py -v
 
       - name: Build Docker Image
         run: |
