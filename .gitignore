@@ -258,3 +258,6 @@ artifact/test.csv
 
 # Local training outputs
 artifact/
+defence.txt
+logs/
+output.png

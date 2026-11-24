@@ -2,11 +2,9 @@
 
 An end-to-end machine learning application for detecting fraudulent credit card transactions using XGBoost, with SHAP-based explainability and an interactive Streamlit interface.
 
-**Live Demo:** [Open Application](https://fraud-detection-rag-copilot-mcc4pvckeztjpn8tov62dx.streamlit.app/)
+**Live Demo:** https://fraud-detection-rag-copilot-mcc4pvckeztjpn8tov62dx.streamlit.app/
 
-**GitHub:** [Source Code](https://github.com/AbhishekG-cloud/fraud-detection-rag-copilot)
-
----
+**GitHub:** https://github.com/AbhishekG-cloud/fraud-detection-xgboost-mlops
 
 ## 1. Project Overview
 
@@ -24,14 +22,18 @@ This project implements an end-to-end fraud detection pipeline that combines:
 The application allows users to explore sample transactions, obtain fraud predictions, and understand which features contributed to the model's output.
 ## 2 Application Preview
 
+
 ### Application Interface
+
 ![Application Landing Page](screenshots/Landing%20page.png)
 
 ### Legitimate Transaction Prediction
-![Legitimate Transaction Prediction](screenshots/Legitimate%20trans.png)
+
+![Legitimate Transaction](screenshots/Legitimate%20trans.png)
 
 ### Fraudulent Transaction Prediction
-![Fraudulent Transaction Prediction](screenshots/Fraud%20trans.png)
+
+![Fraudulent Transaction](screenshots/Fraud%20trans.png)
 
 ## 3. Problem Statement
 
@@ -179,7 +181,7 @@ The original V1–V28 features are anonymized PCA components, so their individua
 ### Main Project Structure
 
 ```text
-fraud-detection-rag-copilot/
+fraud-detection-xgboost-mlops/
 │
 ├── app_streamlit.py
 ├── app.py
@@ -327,7 +329,7 @@ M.Sc. Mathematics | NIT Kurukshetra
 Interested in Machine Learning, Applied Mathematics, and Data Science.
 
 - GitHub: [AbhishekG-cloud](https://github.com/AbhishekG-cloud)
-- Project: [Credit Card Fraud Detection](https://github.com/AbhishekG-cloud/fraud-detection-rag-copilot)
+- Project: [Credit Card Fraud Detection](https://github.com/AbhishekG-cloud/fraud-detection-xgboost-mlops)
 
 ---
 
