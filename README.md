@@ -1,4 +1,5 @@
 # Credit Card Fraud Detection System
+[![CI](https://github.com/AbhishekG-cloud/fraud-detection-xgboost-mlops/actions/workflows/main.yaml/badge.svg)](https://github.com/AbhishekG-cloud/fraud-detection-xgboost-mlops/actions/workflows/main.yaml)
 
 An end-to-end machine learning application for detecting fraudulent credit card transactions using XGBoost, with SHAP-based explainability and an interactive Streamlit interface.
 
